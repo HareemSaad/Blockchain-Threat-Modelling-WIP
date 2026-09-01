@@ -345,6 +345,7 @@ export default {
                 'LINDDUN',
                 'PLOT4ai',
                 'STRIDE',
+                'WEB3',
                 'EOP',
             ],
             number: 0,

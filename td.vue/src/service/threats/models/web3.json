@@ -1,0 +1,58 @@
+{
+    "actor": {
+        "wallet": "threats.model.web3.wallet",
+        "keyManagement": "threats.model.web3.keyManagement",
+        "signing": "threats.model.web3.signing",
+        "phishing": "threats.model.web3.phishing"
+    },
+    "store": {
+        "keyManagement": "threats.model.web3.keyManagement",
+        "rpcTransport": "threats.model.web3.rpcTransport"
+    },
+    "process": {
+        "slippage": "threats.model.web3.slippage",
+        "mev": "threats.model.web3.mev",
+        "frontRunning": "threats.model.web3.frontRunning",
+        "oracle": "threats.model.web3.oracle",
+        "bridge": "threats.model.web3.bridge",
+        "gasGriefing": "threats.model.web3.gasGriefing"
+    },
+    "flow": {
+        "signing": "threats.model.web3.signing",
+        "rpcTransport": "threats.model.web3.rpcTransport",
+        "slippage": "threats.model.web3.slippage",
+        "oracle": "threats.model.web3.oracle",
+        "bridge": "threats.model.web3.bridge",
+        "replay": "threats.model.web3.replay"
+    },
+    "smartContract": {
+        "contractReentrancy": "threats.model.web3.contractReentrancy",
+        "contractAccessControl": "threats.model.web3.contractAccessControl",
+        "contractArithmetic": "threats.model.web3.contractArithmetic",
+        "contractUpgradeability": "threats.model.web3.contractUpgradeability",
+        "contractUncheckedCall": "threats.model.web3.contractUncheckedCall",
+        "contractDoS": "threats.model.web3.contractDoS",
+        "oracle": "threats.model.web3.oracle",
+        "replay": "threats.model.web3.replay"
+    },
+    "all": {
+        "wallet": "threats.model.web3.wallet",
+        "keyManagement": "threats.model.web3.keyManagement",
+        "signing": "threats.model.web3.signing",
+        "phishing": "threats.model.web3.phishing",
+        "rpcTransport": "threats.model.web3.rpcTransport",
+        "slippage": "threats.model.web3.slippage",
+        "mev": "threats.model.web3.mev",
+        "frontRunning": "threats.model.web3.frontRunning",
+        "oracle": "threats.model.web3.oracle",
+        "bridge": "threats.model.web3.bridge",
+        "gasGriefing": "threats.model.web3.gasGriefing",
+        "replay": "threats.model.web3.replay",
+        "contractReentrancy": "threats.model.web3.contractReentrancy",
+        "contractAccessControl": "threats.model.web3.contractAccessControl",
+        "contractArithmetic": "threats.model.web3.contractArithmetic",
+        "contractUpgradeability": "threats.model.web3.contractUpgradeability",
+        "contractUncheckedCall": "threats.model.web3.contractUncheckedCall",
+        "contractDoS": "threats.model.web3.contractDoS"
+    }
+}

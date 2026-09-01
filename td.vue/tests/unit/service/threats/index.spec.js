@@ -152,6 +152,32 @@ describe('service/threats/index.js', () => {
         });
     });
 
+    describe('create new WEB3 threat', () => {
+        it('has a WEB3 modelType', () => {
+            expect(createNewTypedThreat('WEB3', 'tm.SmartContract').modelType).toEqual('WEB3');
+        });
+
+        it('leads the Smart Contract element with reentrancy', () => {
+            expect(createNewTypedThreat('WEB3', 'tm.SmartContract').type).toEqual('Reentrancy');
+        });
+
+        it('pre-fills the title from the rules engine', () => {
+            expect(createNewTypedThreat('WEB3', 'tm.SmartContract').title).toEqual('Reentrancy');
+        });
+
+        it('pre-fills the severity from the rules engine', () => {
+            expect(createNewTypedThreat('WEB3', 'tm.SmartContract').severity).toEqual('Critical');
+        });
+
+        it('pre-fills a substantial description from the rules engine', () => {
+            expect(createNewTypedThreat('WEB3', 'tm.SmartContract').description.length).toBeGreaterThan(40);
+        });
+
+        it('uses the wallet category for an actor', () => {
+            expect(createNewTypedThreat('WEB3', 'tm.Actor').severity).toEqual('High');
+        });
+    });
+
     describe('create new typed threat branches', () => {
         afterEach(() => {
             jest.restoreAllMocks();

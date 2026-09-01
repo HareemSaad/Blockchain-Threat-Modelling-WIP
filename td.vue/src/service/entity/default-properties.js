@@ -164,6 +164,39 @@ const process = {
     }
 };
 
+const smartContract = {
+    size: {
+        width: 130,
+        height: 90
+    },
+    attrs: {
+        text: {
+            text: tc('threatmodel.shapes.smartContract'),
+        },
+        body: {
+            stroke: '#333333',
+            strokeWidth: 1.5,
+            strokeDasharray: null
+        }
+    },
+    shape: 'smart-contract',
+    zIndex: 0,
+    data: {
+        type: 'tm.SmartContract',
+        name: tc('threatmodel.shapes.smartContract'),
+        description: '',
+        outOfScope: false,
+        isTrustBoundary: false,
+        reasonOutOfScope: '',
+        hasOpenThreats: false,
+        isUpgradeable: false,
+        handlesValue: false,
+        usesExternalCalls: false,
+        usesOracle: false,
+        threats: []
+    }
+};
+
 const store = {
     size: {
         width: 150,
@@ -222,6 +255,7 @@ const propsByType = {
     'tm.Flow': flow,
     'tm.FlowStencil': flow,
     'tm.Process': process,
+    'tm.SmartContract': smartContract,
     'tm.Store': store,
     'tm.Text': text
 };

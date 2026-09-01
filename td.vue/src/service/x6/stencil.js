@@ -40,6 +40,7 @@ const get = (target, container, StencilClass = DefaultStencil) => {
     stencil.load(
         [
             new shapes.ProcessShape(),
+            new shapes.SmartContractShape(),
             new shapes.StoreShape(),
             new shapes.ActorShape(),
             new shapes.FlowStencil(),

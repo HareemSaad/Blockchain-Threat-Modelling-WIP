@@ -200,6 +200,11 @@
         "defaultDescription": "New STRIDE diagram description",
         "select": "STRIDE"
       },
+      "web3": {
+        "defaultTitle": "New Web3 diagram",
+        "defaultDescription": "New Web3 diagram description",
+        "select": "Web3"
+      },
       "linddun": {
         "defaultTitle": "New LINDDUN diagram",
         "defaultDescription": "New LINDDUN diagram description",
@@ -273,7 +278,11 @@
       "protocol": "Protocol",
       "publicNetwork": "Public Network",
       "storesCredentials": "Stores Credentials",
-      "storesInventory": "Stores Inventory"
+      "storesInventory": "Stores Inventory",
+      "isUpgradeable": "Upgradeable (proxy)",
+      "handlesValue": "Handles value / funds",
+      "usesExternalCalls": "Makes external calls",
+      "usesOracle": "Uses a price oracle"
     },
     "buttons": {
       "delete": "Delete selected",
@@ -336,6 +345,7 @@
       "flow": "Data Flow",
       "flowStencil": "Data Flow",
       "process": "Process",
+      "smartContract": "Smart Contract",
       "store": "Store",
       "text": "Descriptive text",
       "trustBoundary": "Trust Boundary"
@@ -431,6 +441,27 @@
         "denialOfService": "Denial of service",
         "elevationOfPrivilege": "Elevation of privilege"
       },
+      "web3": {
+        "header": "--- Web3 ---",
+        "wallet": "Wallet connection / session",
+        "keyManagement": "Private key / seed management",
+        "signing": "Blind signing",
+        "phishing": "Phishing / approval drain",
+        "rpcTransport": "RPC / transport",
+        "slippage": "Price slippage",
+        "mev": "MEV (sandwich / back-run)",
+        "frontRunning": "Front-running / order dependence",
+        "oracle": "Oracle manipulation",
+        "bridge": "Cross-chain bridge",
+        "gasGriefing": "Gas griefing",
+        "replay": "Signature / cross-chain replay",
+        "contractReentrancy": "Reentrancy",
+        "contractAccessControl": "Access control",
+        "contractArithmetic": "Arithmetic / precision",
+        "contractUpgradeability": "Upgradeability / proxy",
+        "contractUncheckedCall": "Unchecked external call",
+        "contractDoS": "Contract denial of service"
+      },
       "eop": {
         "header": "--- EoP ---",
         "dataValidationAndEncoding": "Data Validation & Encoding",
@@ -449,6 +480,7 @@
       "linddun": "New LINDDUN threat",
       "plot4ai": "New PLOT4ai threat",
       "stride": "New STRIDE threat",
+      "web3": "New Web3 threat",
       "eop": "New EoP threat"
     },
     "edit": "Edit Threat",

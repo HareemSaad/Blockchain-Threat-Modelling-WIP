@@ -202,6 +202,59 @@
           </b-form-group>
         </b-col>
 
+        <b-col v-if="cellRef.data.type === 'tm.SmartContract'">
+          <b-form-group label-cols="auto" id="smart-contract-group">
+            <div class="form-check">
+              <input
+                id="isUpgradeable"
+                :checked="cellRef.data.isUpgradeable"
+                class="form-check-input"
+                type="checkbox"
+                @change="cellRef.data.isUpgradeable = $event.target.checked; onChangeProperties()"
+              >
+              <label class="form-check-label" for="isUpgradeable">
+                {{ $t('threatmodel.properties.isUpgradeable') }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                id="handlesValue"
+                :checked="cellRef.data.handlesValue"
+                class="form-check-input"
+                type="checkbox"
+                @change="cellRef.data.handlesValue = $event.target.checked; onChangeProperties()"
+              >
+              <label class="form-check-label" for="handlesValue">
+                {{ $t('threatmodel.properties.handlesValue') }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                id="usesExternalCalls"
+                :checked="cellRef.data.usesExternalCalls"
+                class="form-check-input"
+                type="checkbox"
+                @change="cellRef.data.usesExternalCalls = $event.target.checked; onChangeProperties()"
+              >
+              <label class="form-check-label" for="usesExternalCalls">
+                {{ $t('threatmodel.properties.usesExternalCalls') }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                id="usesOracle"
+                :checked="cellRef.data.usesOracle"
+                class="form-check-input"
+                type="checkbox"
+                @change="cellRef.data.usesOracle = $event.target.checked; onChangeProperties()"
+              >
+              <label class="form-check-label" for="usesOracle">
+                {{ $t('threatmodel.properties.usesOracle') }}
+              </label>
+            </div>
+          </b-form-group>
+        </b-col>
+
         <b-col v-if="cellRef.data.type === 'tm.Store'">
           <b-form-group label-cols="auto" id="isalog-group">
             <div class="form-check">

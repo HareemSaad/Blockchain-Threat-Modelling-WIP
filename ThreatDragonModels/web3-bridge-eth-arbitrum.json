@@ -1,0 +1,1759 @@
+{
+  "version": "2.4.0",
+  "summary": {
+    "title": "Web3 Token Bridge (Ethereum <-> Arbitrum)",
+    "owner": "hareemsaad",
+    "description": "Threat model for a cross-chain token bridge: users lock ERC-20 tokens in an Ethereum bridge contract, a relayer/validator server attests the lock and relays a signed message to an Arbitrum bridge contract that mints the wrapped token. Modeled with the experience-based WEB3 methodology.",
+    "id": 0
+  },
+  "detail": {
+    "contributors": [
+      {
+        "name": "hareemsaad"
+      }
+    ],
+    "diagrams": [
+      {
+        "id": 0,
+        "title": "ETH <-> Arbitrum Bridge",
+        "diagramType": "WEB3",
+        "placeholder": "New Web3 diagram description",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "version": "2.4.0",
+        "cells": [
+          {
+            "position": {
+              "x": 250,
+              "y": 180
+            },
+            "size": {
+              "width": 360,
+              "height": 340
+            },
+            "attrs": {
+              "label": {
+                "text": "Ethereum L1 (trust boundary)"
+              }
+            },
+            "visible": true,
+            "shape": "trust-boundary-box",
+            "id": "bb-ethereum-l1--trust-boundary-",
+            "zIndex": -1,
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Ethereum L1 (trust boundary)",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 1000,
+              "y": 180
+            },
+            "size": {
+              "width": 380,
+              "height": 340
+            },
+            "attrs": {
+              "label": {
+                "text": "Arbitrum L2 (trust boundary)"
+              }
+            },
+            "visible": true,
+            "shape": "trust-boundary-box",
+            "id": "bb-arbitrum-l2--trust-boundary-",
+            "zIndex": -1,
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Arbitrum L2 (trust boundary)",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 40,
+              "y": 40
+            },
+            "size": {
+              "width": 520,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Token Bridge: Ethereum <-> Relayer Server <-> Arbitrum\nWEB3 methodology (experience-based)"
+              }
+            },
+            "visible": true,
+            "shape": "td-text-block",
+            "id": "txt-8",
+            "zIndex": 2,
+            "data": {
+              "type": "tm.Text",
+              "name": "Token Bridge: Ethereum <-> Relayer Server <-> Arbitrum\nWEB3 methodology (experience-based)",
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 40,
+              "y": 300
+            },
+            "size": {
+              "width": 150,
+              "height": 80
+            },
+            "attrs": {
+              "text": {
+                "text": "User Wallet"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "p-top"
+                },
+                {
+                  "group": "right",
+                  "id": "p-right"
+                },
+                {
+                  "group": "bottom",
+                  "id": "p-bottom"
+                },
+                {
+                  "group": "left",
+                  "id": "p-left"
+                }
+              ]
+            },
+            "id": "n-tm-actor-user-wallet",
+            "zIndex": 1,
+            "data": {
+              "type": "tm.Actor",
+              "name": "User Wallet",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "providesAuthentication": true,
+              "threats": [
+                {
+                  "id": "threat-wallet-1",
+                  "title": "Wallet connection / session hijack",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Wallet connection / session",
+                  "description": "The dApp<->wallet connection (injected provider, WalletConnect, deep link) can be hijacked or spoofed: a malicious page reuses an approved session, a rogue relay MITMs the WalletConnect bridge, or a look-alike origin is granted account access. The user may then be prompted to sign attacker-controlled requests believing they come from the legitimate app.",
+                  "mitigation": "Pin and display the connected origin; verify chainId before every request; scope and expire WalletConnect sessions and show active sessions to the user; re-authenticate with a fresh nonce (EIP-4361 Sign-In-With-Ethereum) rather than trusting a persisted connection; never auto-approve eth_requestAccounts. Ref: SCSVS-WALLET, EIP-4361.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 1,
+                  "score": ""
+                },
+                {
+                  "id": "threat-signing-2",
+                  "title": "Blind signing of malicious payloads",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Blind signing",
+                  "description": "The user signs a transaction or an off-chain message (eth_signTypedData / personal_sign / permit) whose true effect is opaque in the wallet UI. Attackers exploit this with unlimited token approvals, Permit/Permit2 signatures, setApprovalForAll, or Seaport/'0x' order signatures that drain assets without an on-chain transaction from the victim.",
+                  "mitigation": "Present human-readable transaction simulation and decoded calldata before signing (EIP-712 structured data, wallet 'what will happen' preview); warn on approvals to unknown spenders and on infinite allowances; scope approvals to exact amounts and expire them; use Permit2 allowance expiries; educate users to reject blind hex signatures. Ref: EIP-712, SWC-onchain-approval patterns, SCSVS.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 2,
+                  "score": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 300,
+              "y": 240
+            },
+            "size": {
+              "width": 160,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "ETH Bridge (Lockbox)"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "smart-contract",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "p-top"
+                },
+                {
+                  "group": "right",
+                  "id": "p-right"
+                },
+                {
+                  "group": "bottom",
+                  "id": "p-bottom"
+                },
+                {
+                  "group": "left",
+                  "id": "p-left"
+                }
+              ]
+            },
+            "id": "n-tm-smartcontract-eth-bridge--lockbox-",
+            "zIndex": 2,
+            "data": {
+              "type": "tm.SmartContract",
+              "name": "ETH Bridge (Lockbox)",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isUpgradeable": true,
+              "handlesValue": true,
+              "usesExternalCalls": true,
+              "usesOracle": false,
+              "threats": [
+                {
+                  "id": "threat-contractReentrancy-3",
+                  "title": "Reentrancy",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Reentrancy",
+                  "description": "An external call (ETH transfer, ERC-777/ERC-721 hook, or arbitrary callee) is made before state is finalized, letting the callee re-enter the function or a sibling function and act on stale state - classic single-function, cross-function, and read-only reentrancy (SWC-107). This is architecturally represented here as a checklist prompt on the contract element; it is NOT auto-detected.",
+                  "mitigation": "Apply checks-effects-interactions: update all state before external calls. Add a nonReentrant guard (OpenZeppelin ReentrancyGuard) on state-changing entry points; beware read-only reentrancy in view functions used by other protocols; treat token-transfer callbacks (ERC-777/1155/721) as reentrancy vectors. DETECT with Slither (reentrancy-* detectors), Mythril, and Foundry invariant/fuzz tests - this tool only flags the risk to review. Ref: SWC-107, SCSVS-CODE.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 3,
+                  "score": ""
+                },
+                {
+                  "id": "threat-contractAccessControl-4",
+                  "title": "Broken / missing access control",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Access control",
+                  "description": "Privileged functions (mint, withdraw, upgrade, setOwner, pause, parameter setters) lack correct authorization, use tx.origin for auth (SWC-115), leave an initializer callable by anyone (uninitialized proxy/owner), or have default/unprotected visibility (SWC-100/SWC-105). Attackers seize ownership or drain funds.",
+                  "mitigation": "Gate every privileged function with explicit role checks (OpenZeppelin Ownable/AccessControl); never authorize with tx.origin - use msg.sender; ensure initializers run exactly once and are access-controlled; make sensitive functions explicitly external/internal with the right modifiers; use a timelock + multisig for admin actions. DETECT with Slither (suicidal, arbitrary-send, tx-origin) and manual review. Ref: SWC-100, SWC-105, SWC-115, SCSVS-AUTH.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 4,
+                  "score": ""
+                },
+                {
+                  "id": "threat-contractUpgradeability-5",
+                  "title": "Proxy / upgradeability flaws",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Upgradeability / proxy",
+                  "description": "Upgradeable-contract pitfalls: storage-layout collision between proxy and implementation or across upgrades, unprotected upgrade function, uninitialized implementation, delegatecall to attacker-controlled code (SWC-112), or a self-destructible/replaceable logic contract. A bad upgrade can rewrite all state or brick the system. Applies when this contract is marked upgradeable.",
+                  "mitigation": "Use a vetted proxy pattern (OpenZeppelin UUPS/Transparent) and its storage-gap and initializer conventions; never change storage layout incompatibly; protect and timelock the upgrade path behind multisig; initialize implementations; forbid delegatecall to untrusted targets. DETECT with slither-check-upgradeability / OpenZeppelin Upgrades plugin. Ref: SWC-112, SCSVS-ARCH.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 5,
+                  "score": ""
+                },
+                {
+                  "id": "threat-bridge-6",
+                  "title": "Cross-chain bridge / relayer trust",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Cross-chain bridge",
+                  "description": "Bridging relies on off-chain validators, multisigs, or message relayers to attest events on another chain. A compromised validator set, forged proof, replayed message, or paused-but-unwound state can mint unbacked assets or lock user funds. Bridges are among the highest-value web3 targets historically.",
+                  "mitigation": "Prefer light-client / proof-based verification over trusted-multisig bridges; enforce per-message replay protection (unique nonces, consumed-message registry) and per-epoch mint caps/rate limits; require strong, decentralized validator thresholds with timelocked upgrades; monitor mint/burn invariants and add circuit breakers. Ref: SCSVS-CROSSCHAIN.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 6,
+                  "score": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 300,
+              "y": 390
+            },
+            "size": {
+              "width": 160,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "ERC-20 Token Vault"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "smart-contract",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "p-top"
+                },
+                {
+                  "group": "right",
+                  "id": "p-right"
+                },
+                {
+                  "group": "bottom",
+                  "id": "p-bottom"
+                },
+                {
+                  "group": "left",
+                  "id": "p-left"
+                }
+              ]
+            },
+            "id": "n-tm-smartcontract-erc-20-token-vault",
+            "zIndex": 3,
+            "data": {
+              "type": "tm.SmartContract",
+              "name": "ERC-20 Token Vault",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isUpgradeable": false,
+              "handlesValue": true,
+              "usesExternalCalls": true,
+              "usesOracle": false,
+              "threats": [
+                {
+                  "id": "threat-contractAccessControl-7",
+                  "title": "Broken / missing access control",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Access control",
+                  "description": "Privileged functions (mint, withdraw, upgrade, setOwner, pause, parameter setters) lack correct authorization, use tx.origin for auth (SWC-115), leave an initializer callable by anyone (uninitialized proxy/owner), or have default/unprotected visibility (SWC-100/SWC-105). Attackers seize ownership or drain funds.",
+                  "mitigation": "Gate every privileged function with explicit role checks (OpenZeppelin Ownable/AccessControl); never authorize with tx.origin - use msg.sender; ensure initializers run exactly once and are access-controlled; make sensitive functions explicitly external/internal with the right modifiers; use a timelock + multisig for admin actions. DETECT with Slither (suicidal, arbitrary-send, tx-origin) and manual review. Ref: SWC-100, SWC-105, SWC-115, SCSVS-AUTH.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 7,
+                  "score": ""
+                },
+                {
+                  "id": "threat-contractUncheckedCall-8",
+                  "title": "Unchecked / unsafe external call return",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Unchecked external call",
+                  "description": "The return value of a low-level call/send/delegatecall or a non-reverting ERC-20 transfer is not checked (SWC-104), so a failed transfer or callee revert is silently ignored and the contract continues in an inconsistent state - e.g. crediting a withdrawal that never paid out, or trusting a token that returns false instead of reverting.",
+                  "mitigation": "Check the boolean success of every low-level call and revert on failure; use SafeERC20 (safeTransfer/safeTransferFrom) for tokens that don't revert; prefer pull-payments; handle both revert and false-return token behaviors. DETECT with Slither (unchecked-lowlevel, unchecked-transfer). Ref: SWC-104, SCSVS-CODE.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 8,
+                  "score": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 690,
+              "y": 250
+            },
+            "size": {
+              "width": 170,
+              "height": 120
+            },
+            "attrs": {
+              "text": {
+                "text": "Relayer / Validator Server"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "p-top"
+                },
+                {
+                  "group": "right",
+                  "id": "p-right"
+                },
+                {
+                  "group": "bottom",
+                  "id": "p-bottom"
+                },
+                {
+                  "group": "left",
+                  "id": "p-left"
+                }
+              ]
+            },
+            "id": "n-tm-process-relayer---validator-server",
+            "zIndex": 4,
+            "data": {
+              "type": "tm.Process",
+              "name": "Relayer / Validator Server",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "privilegeLevel": "high",
+              "threats": [
+                {
+                  "id": "threat-bridge-9",
+                  "title": "Cross-chain bridge / relayer trust",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Cross-chain bridge",
+                  "description": "Bridging relies on off-chain validators, multisigs, or message relayers to attest events on another chain. A compromised validator set, forged proof, replayed message, or paused-but-unwound state can mint unbacked assets or lock user funds. Bridges are among the highest-value web3 targets historically.",
+                  "mitigation": "Prefer light-client / proof-based verification over trusted-multisig bridges; enforce per-message replay protection (unique nonces, consumed-message registry) and per-epoch mint caps/rate limits; require strong, decentralized validator thresholds with timelocked upgrades; monitor mint/burn invariants and add circuit breakers. Ref: SCSVS-CROSSCHAIN.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 9,
+                  "score": ""
+                },
+                {
+                  "id": "threat-gasGriefing-10",
+                  "title": "Gas griefing / unbounded external work",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Gas griefing",
+                  "description": "A function forwards user-controlled gas to an external call, loops over caller-supplied arrays, or does unbounded work, letting an attacker force out-of-gas, waste relayer gas (meta-tx), or make a subcall silently fail while the outer call succeeds (SWC-126 insufficient gas griefing).",
+                  "mitigation": "Bound loop lengths and per-call work; check the success flag of low-level calls; avoid forwarding all remaining gas to untrusted callees; use pull-payment patterns; for meta-transactions verify the relayer cannot grief the signer. Ref: SWC-126, SWC-113.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 10,
+                  "score": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 700,
+              "y": 430
+            },
+            "size": {
+              "width": 160,
+              "height": 80
+            },
+            "attrs": {
+              "text": {
+                "text": "Relayer Signing Key"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "p-top"
+                },
+                {
+                  "group": "right",
+                  "id": "p-right"
+                },
+                {
+                  "group": "bottom",
+                  "id": "p-bottom"
+                },
+                {
+                  "group": "left",
+                  "id": "p-left"
+                }
+              ]
+            },
+            "id": "n-tm-store-relayer-signing-key",
+            "zIndex": 5,
+            "data": {
+              "type": "tm.Store",
+              "name": "Relayer Signing Key",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "storesCredentials": true,
+              "isEncrypted": false,
+              "threats": [
+                {
+                  "id": "threat-keyManagement-11",
+                  "title": "Private key / seed phrase exposure",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Private key / seed management",
+                  "description": "Private keys or seed phrases are stored, transmitted, or backed up insecurely: plaintext in localStorage/files/env vars, unencrypted cloud backups, keys held in application memory longer than needed, or a single hot key controlling high-value operations. Compromise leads to irreversible loss of all controlled assets.",
+                  "mitigation": "Never store raw keys in browser storage, source, or logs. Use OS keystore / hardware wallet / secure enclave; encrypt at rest with a strong KDF; prefer signing in a hardware or MPC/threshold signer so the raw key is never assembled. Separate hot (low-value, rotatable) from cold (high-value) keys; consider a multisig (e.g. Safe) for treasury. Ref: SCSVS-KEY, NIST key management.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 11,
+                  "score": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 1050,
+              "y": 240
+            },
+            "size": {
+              "width": 160,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "Arbitrum Bridge"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "smart-contract",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "p-top"
+                },
+                {
+                  "group": "right",
+                  "id": "p-right"
+                },
+                {
+                  "group": "bottom",
+                  "id": "p-bottom"
+                },
+                {
+                  "group": "left",
+                  "id": "p-left"
+                }
+              ]
+            },
+            "id": "n-tm-smartcontract-arbitrum-bridge",
+            "zIndex": 6,
+            "data": {
+              "type": "tm.SmartContract",
+              "name": "Arbitrum Bridge",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isUpgradeable": true,
+              "handlesValue": true,
+              "usesExternalCalls": true,
+              "usesOracle": false,
+              "threats": [
+                {
+                  "id": "threat-bridge-12",
+                  "title": "Cross-chain bridge / relayer trust",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Cross-chain bridge",
+                  "description": "Bridging relies on off-chain validators, multisigs, or message relayers to attest events on another chain. A compromised validator set, forged proof, replayed message, or paused-but-unwound state can mint unbacked assets or lock user funds. Bridges are among the highest-value web3 targets historically.",
+                  "mitigation": "Prefer light-client / proof-based verification over trusted-multisig bridges; enforce per-message replay protection (unique nonces, consumed-message registry) and per-epoch mint caps/rate limits; require strong, decentralized validator thresholds with timelocked upgrades; monitor mint/burn invariants and add circuit breakers. Ref: SCSVS-CROSSCHAIN.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 12,
+                  "score": ""
+                },
+                {
+                  "id": "threat-replay-13",
+                  "title": "Signature / cross-chain replay",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Signature / cross-chain replay",
+                  "description": "A signed message or transaction lacks binding to a unique context and can be replayed: reused on another chain (missing chainId / EIP-155), replayed after a fork, or a meta-transaction/permit reused because the nonce or domain separator is missing or reusable (SWC-121 missing protection against signature replay).",
+                  "mitigation": "Bind every signature to chainId, a contract-specific EIP-712 domain separator, and a per-signer nonce that is consumed on use; include deadlines; invalidate signatures on upgrade; follow EIP-155 for raw transactions. Ref: SWC-121, SWC-117, EIP-712, EIP-155.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 13,
+                  "score": ""
+                },
+                {
+                  "id": "threat-contractAccessControl-14",
+                  "title": "Broken / missing access control",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Access control",
+                  "description": "Privileged functions (mint, withdraw, upgrade, setOwner, pause, parameter setters) lack correct authorization, use tx.origin for auth (SWC-115), leave an initializer callable by anyone (uninitialized proxy/owner), or have default/unprotected visibility (SWC-100/SWC-105). Attackers seize ownership or drain funds.",
+                  "mitigation": "Gate every privileged function with explicit role checks (OpenZeppelin Ownable/AccessControl); never authorize with tx.origin - use msg.sender; ensure initializers run exactly once and are access-controlled; make sensitive functions explicitly external/internal with the right modifiers; use a timelock + multisig for admin actions. DETECT with Slither (suicidal, arbitrary-send, tx-origin) and manual review. Ref: SWC-100, SWC-105, SWC-115, SCSVS-AUTH.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 14,
+                  "score": ""
+                },
+                {
+                  "id": "threat-contractReentrancy-15",
+                  "title": "Reentrancy",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Reentrancy",
+                  "description": "An external call (ETH transfer, ERC-777/ERC-721 hook, or arbitrary callee) is made before state is finalized, letting the callee re-enter the function or a sibling function and act on stale state - classic single-function, cross-function, and read-only reentrancy (SWC-107). This is architecturally represented here as a checklist prompt on the contract element; it is NOT auto-detected.",
+                  "mitigation": "Apply checks-effects-interactions: update all state before external calls. Add a nonReentrant guard (OpenZeppelin ReentrancyGuard) on state-changing entry points; beware read-only reentrancy in view functions used by other protocols; treat token-transfer callbacks (ERC-777/1155/721) as reentrancy vectors. DETECT with Slither (reentrancy-* detectors), Mythril, and Foundry invariant/fuzz tests - this tool only flags the risk to review. Ref: SWC-107, SCSVS-CODE.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 15,
+                  "score": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 1050,
+              "y": 390
+            },
+            "size": {
+              "width": 160,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "Wrapped Token Minter"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "smart-contract",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "p-top"
+                },
+                {
+                  "group": "right",
+                  "id": "p-right"
+                },
+                {
+                  "group": "bottom",
+                  "id": "p-bottom"
+                },
+                {
+                  "group": "left",
+                  "id": "p-left"
+                }
+              ]
+            },
+            "id": "n-tm-smartcontract-wrapped-token-minter",
+            "zIndex": 7,
+            "data": {
+              "type": "tm.SmartContract",
+              "name": "Wrapped Token Minter",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isUpgradeable": false,
+              "handlesValue": true,
+              "usesExternalCalls": false,
+              "usesOracle": false,
+              "threats": [
+                {
+                  "id": "threat-contractAccessControl-16",
+                  "title": "Broken / missing access control",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Access control",
+                  "description": "Privileged functions (mint, withdraw, upgrade, setOwner, pause, parameter setters) lack correct authorization, use tx.origin for auth (SWC-115), leave an initializer callable by anyone (uninitialized proxy/owner), or have default/unprotected visibility (SWC-100/SWC-105). Attackers seize ownership or drain funds.",
+                  "mitigation": "Gate every privileged function with explicit role checks (OpenZeppelin Ownable/AccessControl); never authorize with tx.origin - use msg.sender; ensure initializers run exactly once and are access-controlled; make sensitive functions explicitly external/internal with the right modifiers; use a timelock + multisig for admin actions. DETECT with Slither (suicidal, arbitrary-send, tx-origin) and manual review. Ref: SWC-100, SWC-105, SWC-115, SCSVS-AUTH.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 16,
+                  "score": ""
+                },
+                {
+                  "id": "threat-contractArithmetic-17",
+                  "title": "Integer overflow / underflow / precision loss",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Arithmetic / precision",
+                  "description": "Arithmetic wraps or truncates: overflow/underflow in unchecked blocks or pre-0.8 Solidity (SWC-101), rounding/precision loss in fixed-point math, division-before-multiplication, or unsafe casts that silently truncate. Leads to mis-accounting, free mints, or drained balances.",
+                  "mitigation": "Use Solidity >=0.8 checked arithmetic and justify every 'unchecked' block; use audited fixed-point libraries (e.g. PRBMath, FullMath) and multiply-before-divide; validate and bound casts; add invariant/property fuzz tests (Foundry, Echidna) on conservation of value. DETECT with Slither and fuzzing. Ref: SWC-101, SCSVS-CODE.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 17,
+                  "score": ""
+                }
+              ]
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 9,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "1. Deposit + lock (signed tx)",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "1. Deposit + lock (signed tx)",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": true,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "threat-signing-18",
+                  "title": "Blind signing of malicious payloads",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Blind signing",
+                  "description": "The user signs a transaction or an off-chain message (eth_signTypedData / personal_sign / permit) whose true effect is opaque in the wallet UI. Attackers exploit this with unlimited token approvals, Permit/Permit2 signatures, setApprovalForAll, or Seaport/'0x' order signatures that drain assets without an on-chain transaction from the victim.",
+                  "mitigation": "Present human-readable transaction simulation and decoded calldata before signing (EIP-712 structured data, wallet 'what will happen' preview); warn on approvals to unknown spenders and on infinite allowances; scope approvals to exact amounts and expire them; use Permit2 allowance expiries; educate users to reject blind hex signatures. Ref: EIP-712, SWC-onchain-approval patterns, SCSVS.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 18,
+                  "score": ""
+                }
+              ]
+            },
+            "id": "flow-1--deposit---lock--signed-tx-",
+            "source": {
+              "cell": "n-tm-actor-user-wallet",
+              "port": "p-right"
+            },
+            "target": {
+              "cell": "n-tm-smartcontract-eth-bridge--lockbox-",
+              "port": "p-left"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "lock funds",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "lock funds",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "flow-lock-funds",
+            "source": {
+              "cell": "n-tm-smartcontract-eth-bridge--lockbox-",
+              "port": "p-bottom"
+            },
+            "target": {
+              "cell": "n-tm-smartcontract-erc-20-token-vault",
+              "port": "p-top"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 11,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "2. Lock event / attestation",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "2. Lock event / attestation",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": true,
+              "protocol": "JSON-RPC/WSS",
+              "threats": [
+                {
+                  "id": "threat-rpcTransport-19",
+                  "title": "Malicious or MITM'd RPC endpoint",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "RPC / transport",
+                  "description": "The application trusts a single RPC/node endpoint for chain state and broadcast. A compromised, malicious, or MITM'd RPC can lie about balances, allowances, gas, and confirmations, censor or reorder transactions, or leak the user's IP/address graph for deanonymization.",
+                  "mitigation": "Use HTTPS/WSS endpoints only; verify results against multiple independent providers for high-value reads; confirm receipts by block/log inclusion rather than trusting eth_call alone; allow users to configure a trusted RPC; consider light-client / proof verification where available. Do not embed a single hard-coded key-bearing RPC. Ref: SCSVS-COMMS.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 19,
+                  "score": ""
+                }
+              ]
+            },
+            "id": "flow-2--lock-event---attestation",
+            "source": {
+              "cell": "n-tm-smartcontract-eth-bridge--lockbox-",
+              "port": "p-right"
+            },
+            "target": {
+              "cell": "n-tm-process-relayer---validator-server",
+              "port": "p-left"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 12,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "signs with",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "signs with",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "flow-signs-with",
+            "source": {
+              "cell": "n-tm-process-relayer---validator-server",
+              "port": "p-bottom"
+            },
+            "target": {
+              "cell": "n-tm-store-relayer-signing-key",
+              "port": "p-top"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 13,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "3. Relay message + signature (mint)",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "3. Relay message + signature (mint)",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": true,
+              "protocol": "JSON-RPC",
+              "threats": [
+                {
+                  "id": "threat-replay-20",
+                  "title": "Signature / cross-chain replay",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Signature / cross-chain replay",
+                  "description": "A signed message or transaction lacks binding to a unique context and can be replayed: reused on another chain (missing chainId / EIP-155), replayed after a fork, or a meta-transaction/permit reused because the nonce or domain separator is missing or reusable (SWC-121 missing protection against signature replay).",
+                  "mitigation": "Bind every signature to chainId, a contract-specific EIP-712 domain separator, and a per-signer nonce that is consumed on use; include deadlines; invalidate signatures on upgrade; follow EIP-155 for raw transactions. Ref: SWC-121, SWC-117, EIP-712, EIP-155.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 20,
+                  "score": ""
+                },
+                {
+                  "id": "threat-bridge-21",
+                  "title": "Cross-chain bridge / relayer trust",
+                  "status": "Open",
+                  "severity": "Critical",
+                  "type": "Cross-chain bridge",
+                  "description": "Bridging relies on off-chain validators, multisigs, or message relayers to attest events on another chain. A compromised validator set, forged proof, replayed message, or paused-but-unwound state can mint unbacked assets or lock user funds. Bridges are among the highest-value web3 targets historically.",
+                  "mitigation": "Prefer light-client / proof-based verification over trusted-multisig bridges; enforce per-message replay protection (unique nonces, consumed-message registry) and per-epoch mint caps/rate limits; require strong, decentralized validator thresholds with timelocked upgrades; monitor mint/burn invariants and add circuit breakers. Ref: SCSVS-CROSSCHAIN.",
+                  "modelType": "WEB3",
+                  "new": false,
+                  "number": 21,
+                  "score": ""
+                }
+              ]
+            },
+            "id": "flow-3--relay-message---signature--mint-",
+            "source": {
+              "cell": "n-tm-process-relayer---validator-server",
+              "port": "p-right"
+            },
+            "target": {
+              "cell": "n-tm-smartcontract-arbitrum-bridge",
+              "port": "p-left"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 14,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "mint wrapped token",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "mint wrapped token",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "flow-mint-wrapped-token",
+            "source": {
+              "cell": "n-tm-smartcontract-arbitrum-bridge",
+              "port": "p-bottom"
+            },
+            "target": {
+              "cell": "n-tm-smartcontract-wrapped-token-minter",
+              "port": "p-top"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 15,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "4. Burn / withdraw event",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "4. Burn / withdraw event",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": true,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "flow-4--burn---withdraw-event",
+            "source": {
+              "cell": "n-tm-smartcontract-arbitrum-bridge",
+              "port": "p-top"
+            },
+            "target": {
+              "cell": "n-tm-process-relayer---validator-server",
+              "port": "p-right"
+            },
+            "vertices": [
+              {
+                "x": 950,
+                "y": 200
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "diagramTop": 1,
+    "reviewer": "",
+    "threatTop": 22
+  }
+}

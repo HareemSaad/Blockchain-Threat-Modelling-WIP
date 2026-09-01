@@ -10,6 +10,7 @@ describe('service/x6/stencil.js', () => {
 
         shapes.ActorShape = jest.fn();
         shapes.ProcessShape = jest.fn();
+        shapes.SmartContractShape = jest.fn();
         shapes.StoreShape = jest.fn();
         shapes.FlowStencil = jest.fn();
         shapes.TrustBoundaryBox = jest.fn();
@@ -64,9 +65,14 @@ describe('service/x6/stencil.js', () => {
         expect(shapes.StoreShape).toHaveBeenCalledTimes(1);
     });
 
+    it('creates an instance of SmartContractShape', () => {
+        expect(shapes.SmartContractShape).toHaveBeenCalledTimes(1);
+    });
+
     it('loads the entities', () => {
         expect(stencilInstance.load).toHaveBeenCalledWith(
             [
+                expect.any(Object),
                 expect.any(Object),
                 expect.any(Object),
                 expect.any(Object),

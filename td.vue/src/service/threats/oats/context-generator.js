@@ -1,6 +1,72 @@
 import cia from '@/service/threats/models/cia';
 import linddun from '@/service/threats/models/linddun';
 import stride from '@/service/threats/models/stride';
+import web3 from '@/service/threats/models/web3';
+import web3Rules from '@/service/threats/models/web3.rules.json';
+
+// WEB3 context suggestions: turn an element's type + properties into
+// experience-based, rule-backed suggestions. suggestion.type is an i18n key
+// (the dialog runs it through $t); title/description/mitigation come from the
+// rules library so the context flow matches the by-type flow.
+const web3ContextKeys = (element) => {
+    const keys = new Set();
+    switch (element.type) {
+    case 'tm.SmartContract':
+        keys.add('contractReentrancy');
+        keys.add('contractAccessControl');
+        keys.add('contractArithmetic');
+        if (element.isUpgradeable) { keys.add('contractUpgradeability'); }
+        if (element.usesExternalCalls) {
+            keys.add('contractUncheckedCall');
+            keys.add('contractDoS');
+        }
+        if (element.usesOracle) { keys.add('oracle'); }
+        if (element.handlesValue) { keys.add('replay'); }
+        break;
+    case 'tm.Actor':
+        keys.add('wallet');
+        keys.add('keyManagement');
+        keys.add('signing');
+        keys.add('phishing');
+        break;
+    case 'tm.Store':
+        keys.add('keyManagement');
+        break;
+    case 'tm.Flow':
+        keys.add('signing');
+        keys.add('rpcTransport');
+        keys.add('replay');
+        break;
+    case 'tm.Process':
+        keys.add('slippage');
+        keys.add('mev');
+        keys.add('frontRunning');
+        keys.add('gasGriefing');
+        break;
+    }
+    return [...keys];
+};
+
+const getWeb3ContextSuggestions = (element) => {
+    const keys = web3ContextKeys(element);
+    if (!keys.length) {
+        return [{
+            title: 'No Suggestions available',
+            type: '',
+            description: 'No suggestions available for this context. Add one manually please',
+            mitigation: ''
+        }];
+    }
+    return keys.map((key) => {
+        const rule = web3Rules[key] || {};
+        return {
+            title: rule.title || key,
+            type: web3.all[key] || '',
+            description: rule.description || '',
+            mitigation: rule.mitigation || ''
+        };
+    });
+};
 
 function fixupByContext(suggestions, modelType){
     return suggestions.map((suggestion) => {
@@ -60,6 +126,10 @@ function fixupByContext(suggestions, modelType){
 }
 
 export const GetContextSuggestions = (element, model) => {
+    if (model === 'WEB3') {
+        return getWeb3ContextSuggestions(element);
+    }
+
     const suggestions = [];
     const diagram = (model == 'STRIDE' || model == 'LINDDUN' || model == 'CIA') ? model : 'null';
 

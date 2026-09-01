@@ -1,0 +1,114 @@
+{
+    "_comment": "Experience-based web3 threat rules. NOT an OWASP-certified list. Keyed by category. Used by createNewTypedThreat() to pre-fill a WEB3 threat. References/tooling are folded into the mitigation text to avoid a non-standard schema field.",
+
+    "wallet": {
+        "severity": "High",
+        "title": "Wallet connection / session hijack",
+        "description": "The dApp<->wallet connection (injected provider, WalletConnect, deep link) can be hijacked or spoofed: a malicious page reuses an approved session, a rogue relay MITMs the WalletConnect bridge, or a look-alike origin is granted account access. The user may then be prompted to sign attacker-controlled requests believing they come from the legitimate app.",
+        "mitigation": "Pin and display the connected origin; verify chainId before every request; scope and expire WalletConnect sessions and show active sessions to the user; re-authenticate with a fresh nonce (EIP-4361 Sign-In-With-Ethereum) rather than trusting a persisted connection; never auto-approve eth_requestAccounts. Ref: SCSVS-WALLET, EIP-4361."
+    },
+    "keyManagement": {
+        "severity": "Critical",
+        "title": "Private key / seed phrase exposure",
+        "description": "Private keys or seed phrases are stored, transmitted, or backed up insecurely: plaintext in localStorage/files/env vars, unencrypted cloud backups, keys held in application memory longer than needed, or a single hot key controlling high-value operations. Compromise leads to irreversible loss of all controlled assets.",
+        "mitigation": "Never store raw keys in browser storage, source, or logs. Use OS keystore / hardware wallet / secure enclave; encrypt at rest with a strong KDF; prefer signing in a hardware or MPC/threshold signer so the raw key is never assembled. Separate hot (low-value, rotatable) from cold (high-value) keys; consider a multisig (e.g. Safe) for treasury. Ref: SCSVS-KEY, NIST key management."
+    },
+    "signing": {
+        "severity": "High",
+        "title": "Blind signing of malicious payloads",
+        "description": "The user signs a transaction or an off-chain message (eth_signTypedData / personal_sign / permit) whose true effect is opaque in the wallet UI. Attackers exploit this with unlimited token approvals, Permit/Permit2 signatures, setApprovalForAll, or Seaport/'0x' order signatures that drain assets without an on-chain transaction from the victim.",
+        "mitigation": "Present human-readable transaction simulation and decoded calldata before signing (EIP-712 structured data, wallet 'what will happen' preview); warn on approvals to unknown spenders and on infinite allowances; scope approvals to exact amounts and expire them; use Permit2 allowance expiries; educate users to reject blind hex signatures. Ref: EIP-712, SWC-onchain-approval patterns, SCSVS."
+    },
+    "phishing": {
+        "severity": "High",
+        "title": "Phishing / approval-drain of the end user",
+        "description": "A look-alike front-end, malicious airdrop token, poisoned address (address-poisoning), or fake support flow tricks the user into connecting and approving a drainer contract. Common with ice-phishing (tricking users into signing approvals) rather than stealing keys directly.",
+        "mitigation": "Verify official domains and use ENS/allow-lists; show approval targets and let users review/revoke allowances (revoke.cash pattern); flag freshly-deployed or unverified spender contracts; use address-book / clipboard-tamper protection; wallet-side drainer blocklists. Ref: SCSVS-WALLET, MITRE-style phishing playbooks."
+    },
+    "rpcTransport": {
+        "severity": "Medium",
+        "title": "Malicious or MITM'd RPC endpoint",
+        "description": "The application trusts a single RPC/node endpoint for chain state and broadcast. A compromised, malicious, or MITM'd RPC can lie about balances, allowances, gas, and confirmations, censor or reorder transactions, or leak the user's IP/address graph for deanonymization.",
+        "mitigation": "Use HTTPS/WSS endpoints only; verify results against multiple independent providers for high-value reads; confirm receipts by block/log inclusion rather than trusting eth_call alone; allow users to configure a trusted RPC; consider light-client / proof verification where available. Do not embed a single hard-coded key-bearing RPC. Ref: SCSVS-COMMS."
+    },
+
+    "slippage": {
+        "severity": "High",
+        "title": "Unbounded price slippage",
+        "description": "A swap or liquidity action executes with no or excessive slippage tolerance (e.g. amountOutMin = 0, deadline = far future). Between quote and execution the price moves - through natural volatility or an attacker sandwich - and the user receives far less than expected value.",
+        "mitigation": "Always set a tight, user-confirmed amountOutMin derived from a fresh quote plus a small tolerance; set a short transaction deadline; quote against a manipulation-resistant source; warn the user when price impact is high; consider private mempools/order-flow auction routing to avoid sandwiching. Ref: SCSVS-DEFI."
+    },
+    "mev": {
+        "severity": "High",
+        "title": "MEV extraction (sandwich / back-run)",
+        "description": "A public-mempool transaction is observed and exploited by searchers/builders: sandwich attacks around swaps, JIT liquidity, or back-running oracle updates and liquidations. Value leaks from the user or protocol to the extractor.",
+        "mitigation": "Route sensitive transactions through private order flow / MEV-protect RPC or builder auctions; add tight slippage + short deadlines; batch/commit-reveal or use auctions for price-sensitive actions; design mechanisms (e.g. TWAP execution, frequent batch auctions) that reduce extractable value. Ref: SCSVS-DEFI, Flashbots protect."
+    },
+    "frontRunning": {
+        "severity": "Medium",
+        "title": "Front-running / transaction-order dependence",
+        "description": "Contract logic depends on transaction ordering that attackers can influence by observing the mempool and paying higher priority fees - e.g. claiming a reward, winning an auction bid, or exploiting an approve/transferFrom race (SWC-114). The honest user's intended outcome is stolen or reverted.",
+        "mitigation": "Use commit-reveal schemes, submarine sends, or batch auctions for order-sensitive actions; avoid designs where seeing a pending tx confers advantage; for ERC-20 approve races use increase/decreaseAllowance or Permit2. Ref: SWC-114 (Transaction Order Dependence)."
+    },
+    "oracle": {
+        "severity": "Critical",
+        "title": "Price oracle manipulation",
+        "description": "A contract relies on a manipulable price source - a spot AMM reserve reading, a low-liquidity pool, or a single feed - allowing an attacker (often funded by a flash loan) to move the reported price within one transaction and drain lending, minting, or liquidation logic.",
+        "mitigation": "Use decentralized, tamper-resistant oracles (e.g. Chainlink) with freshness/heartbeat and deviation checks; use TWAPs over sufficient windows rather than spot reserves; validate round completeness and staleness; cap single-block price movement; never price collateral from a pool the attacker can cheaply move. Ref: SWC-oracle-manipulation, SCSVS-DEFI, Chainlink best practices."
+    },
+    "bridge": {
+        "severity": "Critical",
+        "title": "Cross-chain bridge / relayer trust",
+        "description": "Bridging relies on off-chain validators, multisigs, or message relayers to attest events on another chain. A compromised validator set, forged proof, replayed message, or paused-but-unwound state can mint unbacked assets or lock user funds. Bridges are among the highest-value web3 targets historically.",
+        "mitigation": "Prefer light-client / proof-based verification over trusted-multisig bridges; enforce per-message replay protection (unique nonces, consumed-message registry) and per-epoch mint caps/rate limits; require strong, decentralized validator thresholds with timelocked upgrades; monitor mint/burn invariants and add circuit breakers. Ref: SCSVS-CROSSCHAIN."
+    },
+    "gasGriefing": {
+        "severity": "Medium",
+        "title": "Gas griefing / unbounded external work",
+        "description": "A function forwards user-controlled gas to an external call, loops over caller-supplied arrays, or does unbounded work, letting an attacker force out-of-gas, waste relayer gas (meta-tx), or make a subcall silently fail while the outer call succeeds (SWC-126 insufficient gas griefing).",
+        "mitigation": "Bound loop lengths and per-call work; check the success flag of low-level calls; avoid forwarding all remaining gas to untrusted callees; use pull-payment patterns; for meta-transactions verify the relayer cannot grief the signer. Ref: SWC-126, SWC-113."
+    },
+    "replay": {
+        "severity": "High",
+        "title": "Signature / cross-chain replay",
+        "description": "A signed message or transaction lacks binding to a unique context and can be replayed: reused on another chain (missing chainId / EIP-155), replayed after a fork, or a meta-transaction/permit reused because the nonce or domain separator is missing or reusable (SWC-121 missing protection against signature replay).",
+        "mitigation": "Bind every signature to chainId, a contract-specific EIP-712 domain separator, and a per-signer nonce that is consumed on use; include deadlines; invalidate signatures on upgrade; follow EIP-155 for raw transactions. Ref: SWC-121, SWC-117, EIP-712, EIP-155."
+    },
+
+    "contractReentrancy": {
+        "severity": "Critical",
+        "title": "Reentrancy",
+        "description": "An external call (ETH transfer, ERC-777/ERC-721 hook, or arbitrary callee) is made before state is finalized, letting the callee re-enter the function or a sibling function and act on stale state - classic single-function, cross-function, and read-only reentrancy (SWC-107). This is architecturally represented here as a checklist prompt on the contract element; it is NOT auto-detected.",
+        "mitigation": "Apply checks-effects-interactions: update all state before external calls. Add a nonReentrant guard (OpenZeppelin ReentrancyGuard) on state-changing entry points; beware read-only reentrancy in view functions used by other protocols; treat token-transfer callbacks (ERC-777/1155/721) as reentrancy vectors. DETECT with Slither (reentrancy-* detectors), Mythril, and Foundry invariant/fuzz tests - this tool only flags the risk to review. Ref: SWC-107, SCSVS-CODE."
+    },
+    "contractAccessControl": {
+        "severity": "Critical",
+        "title": "Broken / missing access control",
+        "description": "Privileged functions (mint, withdraw, upgrade, setOwner, pause, parameter setters) lack correct authorization, use tx.origin for auth (SWC-115), leave an initializer callable by anyone (uninitialized proxy/owner), or have default/unprotected visibility (SWC-100/SWC-105). Attackers seize ownership or drain funds.",
+        "mitigation": "Gate every privileged function with explicit role checks (OpenZeppelin Ownable/AccessControl); never authorize with tx.origin - use msg.sender; ensure initializers run exactly once and are access-controlled; make sensitive functions explicitly external/internal with the right modifiers; use a timelock + multisig for admin actions. DETECT with Slither (suicidal, arbitrary-send, tx-origin) and manual review. Ref: SWC-100, SWC-105, SWC-115, SCSVS-AUTH."
+    },
+    "contractArithmetic": {
+        "severity": "High",
+        "title": "Integer overflow / underflow / precision loss",
+        "description": "Arithmetic wraps or truncates: overflow/underflow in unchecked blocks or pre-0.8 Solidity (SWC-101), rounding/precision loss in fixed-point math, division-before-multiplication, or unsafe casts that silently truncate. Leads to mis-accounting, free mints, or drained balances.",
+        "mitigation": "Use Solidity >=0.8 checked arithmetic and justify every 'unchecked' block; use audited fixed-point libraries (e.g. PRBMath, FullMath) and multiply-before-divide; validate and bound casts; add invariant/property fuzz tests (Foundry, Echidna) on conservation of value. DETECT with Slither and fuzzing. Ref: SWC-101, SCSVS-CODE."
+    },
+    "contractUpgradeability": {
+        "severity": "Critical",
+        "title": "Proxy / upgradeability flaws",
+        "description": "Upgradeable-contract pitfalls: storage-layout collision between proxy and implementation or across upgrades, unprotected upgrade function, uninitialized implementation, delegatecall to attacker-controlled code (SWC-112), or a self-destructible/replaceable logic contract. A bad upgrade can rewrite all state or brick the system. Applies when this contract is marked upgradeable.",
+        "mitigation": "Use a vetted proxy pattern (OpenZeppelin UUPS/Transparent) and its storage-gap and initializer conventions; never change storage layout incompatibly; protect and timelock the upgrade path behind multisig; initialize implementations; forbid delegatecall to untrusted targets. DETECT with slither-check-upgradeability / OpenZeppelin Upgrades plugin. Ref: SWC-112, SCSVS-ARCH."
+    },
+    "contractUncheckedCall": {
+        "severity": "High",
+        "title": "Unchecked / unsafe external call return",
+        "description": "The return value of a low-level call/send/delegatecall or a non-reverting ERC-20 transfer is not checked (SWC-104), so a failed transfer or callee revert is silently ignored and the contract continues in an inconsistent state - e.g. crediting a withdrawal that never paid out, or trusting a token that returns false instead of reverting.",
+        "mitigation": "Check the boolean success of every low-level call and revert on failure; use SafeERC20 (safeTransfer/safeTransferFrom) for tokens that don't revert; prefer pull-payments; handle both revert and false-return token behaviors. DETECT with Slither (unchecked-lowlevel, unchecked-transfer). Ref: SWC-104, SCSVS-CODE."
+    },
+    "contractDoS": {
+        "severity": "High",
+        "title": "Denial of service (revert / gas / unexpected state)",
+        "description": "The contract can be wedged: DoS-with-unexpected-revert when pushing funds to an address that always reverts (SWC-113), DoS-with-block-gas-limit from unbounded loops over growing arrays (SWC-128), or reliance on a single external dependency that can be paused. One malicious participant blocks all users.",
+        "mitigation": "Favor pull over push payments so one bad recipient can't block others; bound iteration and paginate/batch; isolate external dependencies behind timeouts/circuit breakers; avoid designs where a single actor's revert stalls settlement. DETECT with Slither (dos, calls-loop) and gas/invariant tests. Ref: SWC-113, SWC-128, SCSVS-CODE."
+    }
+}

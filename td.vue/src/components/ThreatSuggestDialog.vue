@@ -88,7 +88,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { createNewTypedThreat } from '@/service/threats/index.js';
+import { createNewTypedThreat, applyWeb3Rule } from '@/service/threats/index.js';
 import { cellDataUpdated } from '@/store/actions/cell.js';
 import tmActions from '@/store/actions/threatmodel.js';
 import dataChanged from '@/service/x6/graph/data-changed.js';
@@ -146,10 +146,16 @@ export default {
             const tmpThreat = createNewTypedThreat(this.modelType, this.cellRef.data.type, this.threatTop + 1);
             this.types = [...this.threatTypes];
             if (type == 'type') {
-                this.threatTypes.map((t, ind) => {
-                    console.log(t);
-                    this.suggestions.push({ ...tmpThreat });
-                    this.suggestions[ind].type = t;
+                // threattypes maps { i18nKey: categoryKey }; use the category key
+                // to pull each type's own WEB3 rule (title/description/mitigation/severity)
+                const threattypes = threatModels.getThreatTypesByElement(this.modelType, this.cellRef.data.type);
+                Object.keys(threattypes).forEach((i18nKey) => {
+                    const suggestion = { ...tmpThreat };
+                    suggestion.type = this.$t(i18nKey);
+                    if (this.modelType === 'WEB3') {
+                        applyWeb3Rule(suggestion, threattypes[i18nKey]);
+                    }
+                    this.suggestions.push(suggestion);
                 });
             } else {
                 this.suggestions = GetContextSuggestions(this.cellRef.data, this.modelType).map((suggestion) => {

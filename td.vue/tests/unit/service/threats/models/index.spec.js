@@ -13,6 +13,7 @@ describe('service/threats/models/index.js', () => {
             expect(models.allModels.includes('LINDDUN')).toBe(true);
             expect(models.allModels.includes('PLOT4ai')).toBe(true);
             expect(models.allModels.includes('STRIDE')).toBe(true);
+            expect(models.allModels.includes('WEB3')).toBe(true);
             expect(models.allModels.includes('EOP')).toBe(true);
         });
     });
@@ -42,6 +43,11 @@ describe('service/threats/models/index.js', () => {
         it('identifies a STRIDE threat', () => {
             expect(models.getByTranslationValue('threats.model.stride.tampering'))
                 .toEqual('STRIDE');
+        });
+
+        it('identifies a WEB3 threat', () => {
+            expect(models.getByTranslationValue('threats.model.web3.contractReentrancy'))
+                .toEqual('WEB3');
         });
 
         it('returns an empty string for an unknown type', () => {
@@ -141,9 +147,29 @@ describe('service/threats/models/index.js', () => {
             expect(Object.keys(models.getThreatTypesByElement('Stride', 'tm.Flow'))).toHaveLength(3);
         });
 
+        it('gets the WEB3 Actor threat types', () => {
+            expect(Object.keys(models.getThreatTypesByElement('WEB3', 'tm.Actor'))).toHaveLength(4);
+        });
+
+        it('gets the WEB3 Process threat types', () => {
+            expect(Object.keys(models.getThreatTypesByElement('WEB3', 'tm.Process'))).toHaveLength(6);
+        });
+
+        it('gets the WEB3 Store threat types', () => {
+            expect(Object.keys(models.getThreatTypesByElement('WEB3', 'tm.Store'))).toHaveLength(2);
+        });
+
+        it('gets the WEB3 DataFlow threat types', () => {
+            expect(Object.keys(models.getThreatTypesByElement('WEB3', 'tm.Flow'))).toHaveLength(6);
+        });
+
+        it('gets the WEB3 Smart Contract threat types', () => {
+            expect(Object.keys(models.getThreatTypesByElement('WEB3', 'tm.SmartContract'))).toHaveLength(8);
+        });
+
         it('returns all threat types when the model type is not found', () => {
             console.error = jest.fn();
-            expect(Object.keys(models.getThreatTypesByElement('fake', 'tm.Actor'))).toHaveLength(35);
+            expect(Object.keys(models.getThreatTypesByElement('fake', 'tm.Actor'))).toHaveLength(54);
         });
     });
 
@@ -239,6 +265,30 @@ describe('service/threats/models/index.js', () => {
 
         it('provides a STRIDE default map', () => {
             expect(Object.keys(models.getFrequencyMapByElement('stride', 'foobar'))).toHaveLength(3);
+        });
+
+        it('gets the WEB3 Actor map', () => {
+            expect(Object.keys(models.getFrequencyMapByElement('WEB3', 'tm.Actor'))).toHaveLength(4);
+        });
+
+        it('gets the WEB3 Process map', () => {
+            expect(Object.keys(models.getFrequencyMapByElement('WEB3', 'tm.Process'))).toHaveLength(6);
+        });
+
+        it('gets the WEB3 Store map', () => {
+            expect(Object.keys(models.getFrequencyMapByElement('web3', 'tm.Store'))).toHaveLength(2);
+        });
+
+        it('gets the WEB3 Flow map', () => {
+            expect(Object.keys(models.getFrequencyMapByElement('web3', 'tm.Flow'))).toHaveLength(6);
+        });
+
+        it('gets the WEB3 Smart Contract map', () => {
+            expect(Object.keys(models.getFrequencyMapByElement('web3', 'tm.SmartContract'))).toHaveLength(8);
+        });
+
+        it('provides a WEB3 default map', () => {
+            expect(Object.keys(models.getFrequencyMapByElement('web3', 'foobar'))).toHaveLength(6);
         });
 
         it('handles unknown model type', () => {

@@ -112,6 +112,9 @@ const setType = (cell) => {
     case 'process':
         cell.data.type = 'tm.Process';
         break;
+    case 'smart-contract':
+        cell.data.type = 'tm.SmartContract';
+        break;
     case 'flow':
         cell.data.type = 'tm.Flow';
         break;

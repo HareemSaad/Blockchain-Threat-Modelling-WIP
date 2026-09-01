@@ -45,6 +45,18 @@ FLOW    |   | X |   | X | X |
 */
 import stride from './stride';
 
+/* WEB3 per element (experience-based, not OWASP-certified)
+   Single unified methodology; element type (incl. the Smart Contract element)
+   and its properties decide which tier of threats surface.
+          Wallet/Key/Sign | DeFi/Ecosystem | Contract-code
+ACTOR   | X               |                |
+STORE   | X               |                |
+FLOW    | X               | X              |
+PROCESS |                 | X              |
+SC      |                 | X              | X
+*/
+import web3 from './web3';
+
 const swapKeyValuePairs = (obj) => {
     const swappedObj = {};
     for (const key in obj) {
@@ -65,7 +77,8 @@ const generic = Object.assign(
     Object.assign({ 'threats.model.cia.header': 'ciaHeader' }, swapKeyValuePairs(cia)),
     Object.assign({ 'threats.model.ciedie.header': 'ciaDieHeader' }, swapKeyValuePairs(ciaDie)),
     Object.assign({ 'threats.model.linddun.header': 'linddunHeader' }, swapKeyValuePairs(linddun.all)),
-    Object.assign({ 'threats.model.plot4ai.header': 'plot4aiHeader' }, swapKeyValuePairs(plot4ai.all))
+    Object.assign({ 'threats.model.plot4ai.header': 'plot4aiHeader' }, swapKeyValuePairs(plot4ai.all)),
+    Object.assign({ 'threats.model.web3.header': 'web3Header' }, swapKeyValuePairs(web3.all))
 );
 
 
@@ -92,6 +105,10 @@ const getByTranslationValue = (translation) => {
 
     if (Object.values(stride.all).find(x => x.toLowerCase() === translation.toLowerCase())) {
         return 'STRIDE';
+    }
+
+    if (Object.values(web3.all).find(x => x.toLowerCase() === translation.toLowerCase())) {
+        return 'WEB3';
     }
 
     return '';
@@ -151,6 +168,27 @@ const getThreatTypesByElement = (modelType, cellType) => {
         case 'tm.Flow' :
         default:
             types = stride.flow;
+            break;
+        }
+        break;
+
+    case 'WEB3' :
+        switch (cellType) {
+        case 'tm.Actor' :
+            types = web3.actor;
+            break;
+        case 'tm.Process' :
+            types = web3.process;
+            break;
+        case 'tm.Store' :
+            types = web3.store;
+            break;
+        case 'tm.SmartContract' :
+            types = web3.smartContract;
+            break;
+        case 'tm.Flow' :
+        default:
+            types = web3.flow;
             break;
         }
         break;
@@ -222,6 +260,27 @@ const getFrequencyMapByElement = (modelType, cellType) => {
         }
         break;
 
+    case 'WEB3':
+        switch(cellType) {
+        case 'tm.Actor' :
+            Object.keys(web3.actor).map((k) => {freqMap[k] = 0;});
+            break;
+        case 'tm.Process' :
+            Object.keys(web3.process).map((k) => {freqMap[k] = 0;});
+            break;
+        case 'tm.Store' :
+            Object.keys(web3.store).map((k) => {freqMap[k] = 0;});
+            break;
+        case 'tm.SmartContract' :
+            Object.keys(web3.smartContract).map((k) => {freqMap[k] = 0;});
+            break;
+        case 'tm.Flow' :
+        default:
+            Object.keys(web3.flow).map((k) => {freqMap[k] = 0;});
+            break;
+        }
+        break;
+
     default:
         freqMap = null;
     }
@@ -229,7 +288,7 @@ const getFrequencyMapByElement = (modelType, cellType) => {
     return freqMap;
 };
 
-const allModels = ['CIA', 'CIADIE', 'LINDDUN', 'PLOT4ai', 'STRIDE', 'EOP'];
+const allModels = ['CIA', 'CIADIE', 'LINDDUN', 'PLOT4ai', 'STRIDE', 'WEB3', 'EOP'];
 
 export default {
     allModels,

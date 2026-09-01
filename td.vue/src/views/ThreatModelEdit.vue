@@ -143,6 +143,7 @@
                                             <button type="button" class="td-dropdown-item" @click="onDiagramTypeClick(idx, 'LINDDUN'); close()">{{ $t('threatmodel.diagram.linddun.select') }}</button>
                                             <button type="button" class="td-dropdown-item" @click="onDiagramTypeClick(idx, 'PLOT4ai'); close()">{{ $t('threatmodel.diagram.plot4ai.select') }}</button>
                                             <button type="button" class="td-dropdown-item" @click="onDiagramTypeClick(idx, 'STRIDE'); close()">{{ $t('threatmodel.diagram.stride.select') }}</button>
+                                            <button type="button" class="td-dropdown-item" @click="onDiagramTypeClick(idx, 'WEB3'); close()">{{ $t('threatmodel.diagram.web3.select') }}</button>
                                             <button type="button" class="td-dropdown-item" @click="onDiagramTypeClick(idx, 'EOP'); close()">{{ $t('threatmodel.diagram.eop.select') }}</button>
                                             <button type="button" class="td-dropdown-item" @click="onDiagramTypeClick(idx, 'Generic'); close()">{{ $t('threatmodel.diagram.generic.select') }}</button>
                                         </template>
@@ -355,6 +356,12 @@ export default {
                 placeholder = this.$t('threatmodel.diagram.stride.defaultDescription');
                 break;
 
+            case 'WEB3':
+                thumbnail = './public/content/images/thumbnail.jpg';
+                defaultTitle = this.$t('threatmodel.diagram.web3.defaultTitle');
+                placeholder = this.$t('threatmodel.diagram.web3.defaultDescription');
+                break;
+
             case 'EOP':
                 thumbnail = './public/content/images/thumbnail.eop.jpg';
                 defaultTitle = this.$t('threatmodel.diagram.eop.defaultTitle');
@@ -376,6 +383,7 @@ export default {
                 || this.model.detail.diagrams[idx].title === this.$t('threatmodel.diagram.linddun.defaultTitle')
                 || this.model.detail.diagrams[idx].title === this.$t('threatmodel.diagram.plot4ai.defaultTitle')
                 || this.model.detail.diagrams[idx].title === this.$t('threatmodel.diagram.stride.defaultTitle')
+                || this.model.detail.diagrams[idx].title === this.$t('threatmodel.diagram.web3.defaultTitle')
                 || this.model.detail.diagrams[idx].title === this.$t('threatmodel.diagram.eop.defaultTitle')
                 || this.model.detail.diagrams[idx].title === this.$t('threatmodel.diagram.generic.defaultTitle')
             ) {

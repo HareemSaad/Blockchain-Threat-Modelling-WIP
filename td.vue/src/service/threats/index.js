@@ -1,9 +1,39 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import models from './models/index.js';
+import web3Rules from './models/web3.rules.json';
 import { isOpen, isResolved } from './status.js';
 import { tc } from '../../i18n/index.js';
 import store from '@/store/index.js';
+
+// WEB3: default starting category per element, used when no threat-frequency
+// rotation is available. The Smart Contract element leads with reentrancy.
+const web3DefaultTypeKey = (cellType) => {
+    switch (cellType) {
+    case 'tm.Actor': return 'wallet';
+    case 'tm.Store': return 'keyManagement';
+    case 'tm.Process': return 'slippage';
+    case 'tm.SmartContract': return 'contractReentrancy';
+    case 'tm.Flow':
+    default: return 'signing';
+    }
+};
+
+// WEB3 rules engine: pre-fill an experience-based threat (title, description,
+// mitigation, severity) from the rules library, keyed by the category key
+// (e.g. 'contractReentrancy'). Mutates and returns the threat. Safe no-op for
+// unknown keys. Exported so the suggest dialog can fill per-type suggestions.
+export const applyWeb3Rule = function (threat, typeKey) {
+    const rule = typeKey && web3Rules[typeKey];
+    if (!rule) {
+        return threat;
+    }
+    if (rule.title) { threat.title = rule.title; }
+    if (rule.description) { threat.description = rule.description; }
+    if (rule.mitigation) { threat.mitigation = rule.mitigation; }
+    if (rule.severity) { threat.severity = rule.severity; }
+    return threat;
+};
 
 
 const valuesToTranslations = {
@@ -48,6 +78,9 @@ const convertToTranslationString = (val) => valuesToTranslations[val];
 
 export const createNewTypedThreat = function (modelType, cellType, number) {
     let title, type;
+    // track the category key chosen so the WEB3 rules engine can look up
+    // pre-filled title/description/mitigation/severity below
+    let typeKey;
 
     if (!modelType) {
         modelType = 'STRIDE';
@@ -68,6 +101,7 @@ export const createNewTypedThreat = function (modelType, cellType, number) {
                 choice = k;
             }
         });
+        typeKey = choice;
         type = tc(`threats.model.${modelType.toLowerCase()}.${choice}`);
     } else {
         switch (modelType) {
@@ -105,6 +139,12 @@ export const createNewTypedThreat = function (modelType, cellType, number) {
             }
             break;
 
+        case 'WEB3':
+            title = tc('threats.generic.web3');
+            typeKey = web3DefaultTypeKey(cellType);
+            type = tc(`threats.model.web3.${typeKey}`);
+            break;
+
         case 'EOP':
             title = tc('threats.generic.eop');
             type = 'cornucopia';
@@ -117,7 +157,7 @@ export const createNewTypedThreat = function (modelType, cellType, number) {
         }
     }
 
-    return {
+    const threat = {
         id: uuidv4(),
         title,
         status: 'Open',
@@ -130,6 +170,14 @@ export const createNewTypedThreat = function (modelType, cellType, number) {
         number: number,
         score: ''
     };
+
+    // WEB3 rules engine: pre-fill an experience-based threat from the rules
+    // library instead of the generic placeholders.
+    if (modelType === 'WEB3') {
+        applyWeb3Rule(threat, typeKey);
+    }
+
+    return threat;
 };
 
 const hasOpenThreats = (data) => !!data && !!data.threats &&
